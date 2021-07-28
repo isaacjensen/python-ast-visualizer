@@ -1,12 +1,8 @@
-# Assignment 3
-**Due by 11:59pm on Monday, 5/24/2021**<br/>
-**Demo due by 11:59pm on Friday, 6/7/2021**
-
-In this assignment, we'll work on generating an intermediate representation for a source program, to be passed on to later phases of the compiler.  Specifically, we'll modify the Python parser from assignment 2 to generate an abstract syntax tree (AST) representing the source program.  In addition, we'll take a first stab at generating code using this AST by generating a GraphViz specification of the AST itself.  This will enable us to visualize the AST.
+We'll work on generating an intermediate representation for a source program, to be passed on to later phases of the compiler.  Specifically, we'll modify the Python parser from assignment 2 to generate an abstract syntax tree (AST) representing the source program.  In addition, we'll take a first stab at generating code using this AST by generating a GraphViz specification of the AST itself.  This will enable us to visualize the AST.
 
 There are a few major parts to this assignment, described below.  To get you started, you are provided with a Flex scanner specification in `scanner.l` and a Bison parser specification in `parser.y` that, together with the `main()` function in `main.cpp`, solve the problem defined in assignment 2.  There is also a makefile that specifies compilation for the parser.  Instead of using these files, you may also start with your own solution to assignment 2, if you'd like.
 
-## 1. Implement one or more data structures for building an AST
+## Implement one or more data structures for building an AST
 
 An abstract syntax tree (AST) is a tree-based representation of the source program in which each node in the tree represents a coherent semantic construct in the source program.  An AST closely resembles a parse tree but is more compact because it eliminates or contracts many of the nodes corresponding to nonterminals.  For example, an entire if statement might be represented by a single node in an AST instead of by separate nodes for each of its individual components, as you'd see in a typical parse tree.  Our textbook discusses ASTs in more detail, and Wikipedia also has [a helpful article about them](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
@@ -22,7 +18,7 @@ Alternatively, you might implement separate classes/structures to represent the 
 
 An implementation taking this latter approach might, for example, include a C++ class or C structure to represent an AST node corresponding to a binary operation expression (e.g. `expr OP expr`) in the source language.  Your class/structure might contain a field to represent the specific operator associated with the expression, and it might contain two pointers to other AST nodes, one representing the left-hand side of the binary operation and another representing the right-hand side of the binary operation.  These LHS and RHS nodes might have additional children, or they could represent identifiers, floats, integers, etc. that have no children.  If this implementation also had classes/structures for nodes representing higher-level language constructs, such as assignment statements, the binary operation expression node could be a child of one of these higher-level nodes.
 
-## 2. Modify the parser to use your data structures to build an AST
+## Modify the parser to use your data structures to build an AST
 
 Your next task is to modify the parser included in the starter code (or your own parser from assignment 2) to build an AST using the data structures you defined above.  The general idea here is to modify the actions associated with each of the parser's grammar rules to return an AST node instead of returning a string of C++ code.  This node will then potentially be combined with other nodes when a higher-level construct is recognized.
 
@@ -34,7 +30,7 @@ You'll have to do a few other things in the parser to get this all working, as w
 
 Once you have the parser building your AST, save the root node of the AST in a global variable, similar to the way the current parser provided in the starter code saves the entire translated program string in a global variable.  If you'd like proof that the parser is correctly building an AST at this point, you can modify the `main()` function to print out some information about the AST using this global variable.
 
-## 3. Use your AST to generate a GraphViz specification to visualize the AST
+## Use your AST to generate a GraphViz specification to visualize the AST
 
 Finally, to get practice generating code from an AST, implement functionality to use your AST to generate its own [GraphViz](http://www.graphviz.org/) specification.  You should specifically write a specification that can be passed to the [`dot`](https://graphviz.gitlab.io/_pages/pdf/dotguide.pdf) program (which is installed on the ENGR servers) to generate a visualization of the AST.
 
@@ -81,16 +77,3 @@ You should use your code generation functions by invoking them on the root node 
 ## Testing your code
 
 There are some simple Python programs you may use for testing your AST builder included in the `testing_code/` directory.  Example outputs (both a `.png` visualization and a `.gv` GraphView specification) for these programs are included in the `example_output/` directory.  Note that the ASTs your parser generates may be slightly different than the ones included here, depending on how you choose to represent nodes in the AST.  This is OK, as long as your generated ASTs accurately capture the structure of each input program.
-
-## Submission
-
-We'll be using GitHub Classroom for this assignment, and you will submit your assignment via GitHub.  Make sure your completed files are committed and pushed by the assignment's deadline to the master branch of the GitHub repo that was created for you by GitHub Classroom.  A good way to check whether your files are safely submitted is to look at the master branch your assignment repo on the github.com website (i.e. https://github.com/osu-cs480-sp21/assignment-3-YourGitHubUsername/).  If your changes show up there, you can consider your files submitted.
-
-## Grading criteria
-
-The TAs will grade your assignment by compiling and running it on one of the ENGR servers, e.g. `flip.engr.oregonstate.edu`, so you should make sure your code works as expected there.  `bison` and `flex` are installed on the ENGR servers (as is `dot`).  If your code does not compile and run on the ENGR servers, the TAs will deduct at least 25 points from your score.
-
-This assignment is worth 100 points total, broken down as follows:
-  * 25 points: a set of classes/structures is defined for representing an AST of the relevant subset of Python
-  * 50 points: the parser/scanner are modified to build an AST from the source program using these classes/structures
-  * 25 points: your compiler outputs a GraphViz specification of the constructed AST
